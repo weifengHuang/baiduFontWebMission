@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>任务5</title>
+        <style media="screen">
+            ul {
+                display: flex;
+                align-items: flex-end;
+            }
+            ul li{
+                list-style-type: none;
+                color: red;
+                padding: 10px;
+                border:1px solid black;
+            }
+            li + li {
+                margin-left: 15px
+            }
+        </style>
+    </head>
+    <body>
+        <input id='input'type="text" name="" value="">
+        <button id= 'leftIn'type="button" name="button">左侧入</button>
+        <button id= 'rightIn'type="button" name="button">右侧入</button>
+        <button id= 'leftOut'type="button" name="button">左侧出</button>
+        <button id= 'rightOut'type="button" name="button">右侧出</button>
+        <button id= 'sort'type="button" name="button">sort</button>
+        <ul id='list'>
+        </ul>
+        <ul id = 'sortList'>
+        </ul>
+    </body>
+    <script type="text/javascript">
+        var getInput = function() {
+            var input = document.querySelector('#input')
+            var value = parseInt(input.value)
+            return value
+        }
+        var judegeInput = function(value) {
+            if (typeof(value)== "number" && value >= 10 && value <= 90 ) {
+                return true
+            }else {
+                alert('请输入10到90以内的数值')
+                return false
+            }
+        }
+        var judgeLength  = function() {
+            var li = document.querySelectorAll('#list li')
+            var length = li.length
+            if(length >= 59) {
+                alert('长度已超出60')
+            }
+            console.log('li', li,length)
+        }
+        var template = function(value) {
+            var t = `<li class='listValue' style="
+                    width: 5px;
+                    height: ${2 * value}px;
+                    background: red;" ></li>`
+            return t
+        }
+        var appendHtml = function(classname,value, position) {
+            var t = template(value)
+            var ul = document.querySelector('#'+ classname)
+            ul.insertAdjacentHTML(position, t)
+        }
+        var leftIn = function() {
+            var leftIn = document.querySelector('#leftIn')
+            leftIn.addEventListener('click', function(){
+                judgeLength()
+                var value = getInput()
+                data.unshift(value)
+                judegeInput(value) ? appendHtml('list', value, 'afterbegin'):()=>false
+            })
+        }
+        var leftOut = function() {
+            var leftOut = document.querySelector('#leftOut')
+            leftOut.addEventListener('click', function(){
+                var first = document.querySelectorAll('ul li')[0]
+                console.log('first', first);
+                var value = first.innerHTML
+                var string = '被删除的数字' + value
+                alert(string)
+                first.remove()
+            })
+        }
+        var rightIn = function() {
+            var rightIn = document.querySelector('#rightIn')
+            rightIn.addEventListener('click', function(){
+                judgeLength()
+                var value = getInput()
+                data.push(value)
+                judegeInput(value) ? appendHtml('list', value, 'beforeend'):()=>false
+            })
+        }
+        var rightOut = function() {
+            var rightOut = document.querySelector('#rightOut')
+            rightOut.addEventListener('click', function(){
+                var array = document.querySelectorAll('ul li')
+                var endIndex = array.length - 1
+                var end = array[endIndex]
+                var value = end.innerHTML
+                var string = '被删除的数字' + value
+                alert(string)
+                end.remove()
+            })
+         }
+         var bindDelete  = function() {
+             var list = document.querySelector('#list')
+             list.addEventListener('click', function(event) {
+                 var target = event.target
+                 if(target.classList.contains('listValue')){
+                     console.log(target)
+                     target.remove()
+                 }
+             })
+         }
+         var quicksort = function(array) {
+             if(array.length <= 1){
+                 return array
+             }
+             var left = []
+             var right = []
+             var middleIndex = Math.floor(array.length / 2)
+             var middle = array.splice(middleIndex, 1)[0]
+             for (var i = 0; i < array.length; i++) {
+                 if(array[i] <= middle) {
+                    left.push(array[i])
+                }else {
+                    right.push(array[i])
+                }
+             }
+             return quicksort(left).concat([middle],quicksort(right))
+         }
+         var sort = function() {
+             var sortList = document.querySelector('#sortList')
+             var sortBtn = document.querySelector('#sort')
+             sortBtn.addEventListener('click',function() {
+                 var sortData = data
+                 var sortData = quicksort(sortData)
+                 console.log('2');
+                 for (var i = 0; i < sortData.length; i++) {
+                     var value = sortData[i]
+                    appendHtml('sortList', value, 'beforeend')
+                 }
+             })
+         }
+
+        var main =  function() {
+            data = []
+            leftIn()
+            leftOut()
+            rightIn()
+            rightOut()
+            bindDelete()
+            sort()
+        }
+        main()
+    </script>
+</html>
