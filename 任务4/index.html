@@ -28,7 +28,7 @@
             return value
         }
         var template = function(value) {
-            var t = `<li>${value}</li>`
+            var t = `<li class='listValue'>${value}</li>`
             return t
         }
         var appendHtml = function(value, position) {
@@ -47,6 +47,10 @@
             var leftOut = document.querySelector('#leftOut')
             leftOut.addEventListener('click', function(){
                 var first = document.querySelectorAll('ul li')[0]
+                console.log('first', first);
+                var value = first.innerHTML
+                var string = '被删除的数字' + value
+                alert(string)
                 first.remove()
             })
         }
@@ -63,14 +67,28 @@
                 var array = document.querySelectorAll('ul li')
                 var endIndex = array.length - 1
                 var end = array[endIndex]
+                var value = end.innerHTML
+                var string = '被删除的数字' + value
+                alert(string)
                 end.remove()
             })
+         }
+         var bindDelete  = function() {
+             var list = document.querySelector('#list')
+             list.addEventListener('click', function(event) {
+                 var target = event.target
+                 if(target.classList.contains('listValue')){
+                     console.log(target)
+                     target.remove()
+                 }
+             })
          }
         var main =  function() {
             leftIn()
             leftOut()
             rightIn()
             rightOut()
+            bindDelete()
         }
         main()
     </script>
