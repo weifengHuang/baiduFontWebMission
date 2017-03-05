@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>任务6</title>
+        <style media="screen">
+            ul li {
+                display: inline-block;
+                color: red;
+                padding: 10px;
+                border:1px solid black;
+            }
+            .mark{
+                background-color: black;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea id='textInput'name="name" rows="8" cols="80"></textarea>
+        <input id='search'type="text" name="" value="">
+        <button id= 'searchBtn'type="button" name="button">搜索</button>
+        <button id= 'leftIn'type="button" name="button">左侧入</button>
+        <button id= 'rightIn'type="button" name="button">右侧入</button>
+        <button id= 'leftOut'type="button" name="button">左侧出</button>
+        <button id= 'rightOut'type="button" name="button">右侧出</button>
+        <ul id='list'>
+        </ul>
+    </body>
+    <script type="text/javascript">
+        var getInput = function(idname) {
+            var input = document.querySelector('#' + idname)
+            var value = input.value
+            return value
+        }
+        var template = function(value) {
+            var t = `<li class='listValue'>${value}</li>`
+            return t
+        }
+        var appendHtml = function(value, position) {
+            var t = template(value)
+            var ul = document.querySelector('#list')
+            ul.insertAdjacentHTML(position, t)
+        }
+        var leftIn = function() {
+            var leftIn = document.querySelector('#leftIn')
+            leftIn.addEventListener('click', function(){
+                var value = getInput('textInput')
+                appendHtml(value, 'afterbegin')
+            })
+        }
+        var leftOut = function() {
+            var leftOut = document.querySelector('#leftOut')
+            leftOut.addEventListener('click', function(){
+                var first = document.querySelectorAll('ul li')[0]
+                console.log('first', first);
+                var value = first.innerHTML
+                var string = '被删除的数字' + value
+                alert(string)
+                first.remove()
+            })
+        }
+        var rightIn = function() {
+            var rightIn = document.querySelector('#rightIn')
+            rightIn.addEventListener('click', function(){
+                var value = getInput('textInput')
+                appendHtml(value, 'beforeend')
+            })
+        }
+        var rightOut = function() {
+            var rightOut = document.querySelector('#rightOut')
+            rightOut.addEventListener('click', function(){
+                var array = document.querySelectorAll('ul li')
+                var endIndex = array.length - 1
+                var end = array[endIndex]
+                var value = end.innerHTML
+                var string = '被删除的数字' + value
+                alert(string)
+                end.remove()
+            })
+         }
+         var bindDelete  = function() {
+             var list = document.querySelector('#list')
+             list.addEventListener('click', function(event) {
+                 var target = event.target
+                 if(target.classList.contains('listValue')){
+                     console.log(target)
+                     target.remove()
+                 }
+             })
+         }
+         var search = function() {
+             var searchBtn = document.querySelector('#searchBtn')
+             searchBtn.addEventListener('click', function() {
+                 var value = getInput('search')
+                 var lilist = document.querySelectorAll('.listValue')
+                 for (let i = 0; i < lilist.length; i++) {
+                     var liitem = lilist[i]
+                     liitem.classList.remove('mark')
+                     var liValue = liitem.innerHTML
+                     if(liValue.indexOf(value) != -1){
+                         liitem.classList.add('mark')
+                     }
+                 }
+             })
+
+         }
+        var main =  function() {
+            leftIn()
+            leftOut()
+            rightIn()
+            rightOut()
+            bindDelete()
+            search()
+        }
+        main()
+    </script>
+</html>
